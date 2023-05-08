@@ -42,7 +42,7 @@ dependencies {
     annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-
+    implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
     // queryDSL 설정
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-core"
@@ -59,27 +59,26 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// Querydsl 설정부
-def generated = 'src/main/generated'
-
-// querydsl QClass 파일 생성 위치를 지정
-tasks.withType(JavaCompile) {
-    options.getGeneratedSourceOutputDirectory().set(file(generated))
-}
-
-// java source set 에 querydsl QClass 위치 추가
-sourceSets {
-    main.java.srcDirs += [ generated ]
-}
-
-// gradle clean 시에 QClass 디렉토리 삭제
-clean {
-    delete file(generated)
-}
-
-// Heroku 설정
-jar {
-    manifest {
-        attributes('Main-Class': 'com.emsys.hompage.EmSysProjectApplication')
-    }
-}
+//// Querydsl 설정부
+//def generated = 'src/main/generated'
+//
+//// querydsl QClass 파일 생성 위치를 지정
+//tasks.withType(JavaCompile) {
+//    options.getGeneratedSourceOutputDirectory().set(file(generated))
+//}
+//
+//// java source set 에 querydsl QClass 위치 추가
+//sourceSets {
+//    main.java.srcDirs += [ generated ]
+//}
+//
+//// gradle clean 시에 QClass 디렉토리 삭제
+//clean {
+//    delete file(generated)
+//}
+//
+//// Heroku 설정
+//jar {
+//    manifest {
+//        attributes('Main-Class': 'com.emsys.hompage.EmSysProjectApplication')
+//    }
