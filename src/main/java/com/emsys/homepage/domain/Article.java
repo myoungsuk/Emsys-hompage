@@ -10,7 +10,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString
@@ -21,7 +23,6 @@ import java.util.Objects;
         @Index(columnList = "createdBy")
 
 })
-
 @Entity
 public class Article {
 
@@ -30,17 +31,27 @@ public class Article {
     private Long id;
 
 
-
     @Setter @Column(nullable = false) private String title; //제목
+
     @Setter @Column(nullable = false, length = 10000) private String content; //내용
 
 
     @Setter private String hashtag;
 
+
+    @OrderBy("id")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
+
+
     @CreatedDate @Column(nullable = false) private LocalDateTime createdAt;
     @CreatedBy @Column(nullable = false, length = 100) private String createdBy;
     @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt;
     @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy;
+
+
+
 
     protected Article() {}
 

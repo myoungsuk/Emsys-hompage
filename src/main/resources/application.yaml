@@ -30,6 +30,7 @@ spring:
 
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
   jpa:
     # 뷰에서 엔티티를 사용할 수 있게 해줍니다.
 #    open-in-view: false
@@ -42,6 +43,9 @@ spring:
     properties:
       hibernate.format_sql: true
       hibernate.default_batch_fetch_size: 100
+      hibernate:
+        dialect:
+          MySQL8Dialect: org.hibernate.dialect.MySQL8Dialect
     # H2 콘솔을 비활성화합니다.
   h2:
     console:
