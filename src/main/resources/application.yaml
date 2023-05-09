@@ -52,6 +52,13 @@ spring:
       enabled: true
   sql.init.mode: always
 
+  # Spring Data REST 관련 설정입니다.
+  data.rest:
+    base-path: /api
+    detection-strategy: annotated
+
+
+
 
 #  # 애플리케이션 시작 시 SQL 스크립트를 실행합니다.
 #  sql.init.mode: always
