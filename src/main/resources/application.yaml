@@ -58,18 +58,11 @@ spring:
     detection-strategy: annotated
 
 
+  # Thymeleaf3 관련 설정입니다.
+  #configuration process 디펜던시 써보기
+  thymeleaf3:
+    decoupled-logic: true
 
-
-#  # 애플리케이션 시작 시 SQL 스크립트를 실행합니다.
-#  sql.init.mode: always
-#  # Spring Data REST 관련 설정입니다.
-#  data:
-#    rest:
-#      base-path: /api
-#      detection-strategy: annotated
-#  # Thymeleaf3 관련 설정입니다.
-#  thymeleaf3:
-#    decoupled-logic: true
 #  # Spring Security OAuth2 클라이언트 설정입니다.
 #  security:
 #    oauth2:
