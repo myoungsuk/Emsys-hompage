@@ -21,6 +21,7 @@ public class MainControllerTest {
         this.mvc = mvc;
     }
 
+
     @Test
     void givenNothing_whenRequestingRootPage_thenRedirectsToArticlePage() throws Exception {
         //Given
@@ -29,4 +30,6 @@ public class MainControllerTest {
         mvc.perform(get("/"))
                 .andExpect(status().is3xxRedirection());
     }
+
+
 }

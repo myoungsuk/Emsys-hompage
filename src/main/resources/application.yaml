@@ -33,7 +33,7 @@ spring:
 
   jpa:
     # 뷰에서 엔티티를 사용할 수 있게 해줍니다.
-#    open-in-view: false
+    open-in-view: false
     # 데이터베이스 초기화를 지연시킵니다.
     defer-datasource-initialization: true
     # 테이블 생성

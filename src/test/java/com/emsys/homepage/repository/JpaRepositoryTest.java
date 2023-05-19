@@ -21,10 +21,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@ActiveProfiles("testdb")
-
 @DisplayName("JPA 연결 테스트")
-@Import(JpaRepositoryTest.TestJpaConfig.class)
+@Import(JpaConfig.class)
 @DataJpaTest
 class JpaRepositoryTest {
 
@@ -44,16 +42,19 @@ class JpaRepositoryTest {
 
     @DisplayName("select 테스트")
     @Test
-    void givenTestData_whenSelecting_thenWorksFine() {
+    void givenTestData_whenSelecting_theWorksFine() {
         // Given
+        long previousCount = articleRepository.count();
+
+        UserAccount userAccount = userAccountRepository.save(UserAccount.of("nana", "pw", null, null, null));
+
+        Article article = Article.of(userAccount, "new article", "new content", "#spring");
 
         // When
-        List<Article> articles = articleRepository.findAll();
+        articleRepository.save(article);
 
         // Then
-        assertThat(articles)
-                .isNotNull()
-                .hasSize(123);
+        assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
     }
 
     @DisplayName("insert 테스트")
@@ -61,26 +62,28 @@ class JpaRepositoryTest {
     void givenTestData_whenInserting_thenWorksFine() {
         // Given
         long previousCount = articleRepository.count();
-        UserAccount userAccount = userAccountRepository.save(UserAccount.of("newnana", "pw", null, null, null));
+
+        UserAccount userAccount = userAccountRepository.save(UserAccount.of("nana", "pw", null, null, null));
+
         Article article = Article.of(userAccount, "new article", "new content", "#spring");
 
         // When
         articleRepository.save(article);
 
         // Then
-        Assertions.assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
+        assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
     }
 
     @DisplayName("update 테스트")
     @Test
-    void givenTestData_whenUpdating_thenWorksFine() {
+    void givenTestData_whenUpdating_theWorksFine() {
         // Given
-        Article article = articleRepository.findById(1L).orElseThrow();
+        Article article = articleRepository.findById(1L).orElseThrow(); // id 없으면 throw로 테스트 끝내기
         String updatedHashtag = "#springboot";
         article.setHashtag(updatedHashtag);
 
         // When
-        Article savedArticle = articleRepository.saveAndFlush(article);
+        Article savedArticle = articleRepository.saveAndFlush(article); // Flush를 통해 update 쿼리 관찰 가능(but test 이후 rollback 됨)
 
         // Then
         assertThat(savedArticle).hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
@@ -88,27 +91,18 @@ class JpaRepositoryTest {
 
     @DisplayName("delete 테스트")
     @Test
-    void givenTestData_whenDeleting_thenWorksFine() {
+    void givenTestData_whenDeleting_theWorksFine() {
         // Given
         Article article = articleRepository.findById(1L).orElseThrow();
         long previousArticleCount = articleRepository.count();
-        long previousArticleCommentCount = articleCommentRepository.count();
-        int deletedCommentsSize = article.getArticleComments().size();
+        long previousArticleCommentCount = articleCommentRepository.count();    // 연관 관계 삭제 동작 확인
+        int deletedCommentSize = article.getArticleComments().size();
 
         // When
         articleRepository.delete(article);
 
         // Then
         assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
-        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize);
-    }
-
-    @EnableJpaAuditing
-    @TestConfiguration
-    public static class TestJpaConfig {
-        @Bean
-        public AuditorAware<String> auditorAware() {
-            return () -> Optional.of("nana");
-        }
+        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentSize);
     }
 }
