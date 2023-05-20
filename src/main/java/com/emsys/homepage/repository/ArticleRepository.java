@@ -2,6 +2,7 @@ package com.emsys.homepage.repository;
 
 import com.emsys.homepage.domain.Article;
 import com.emsys.homepage.domain.QArticle;
+import com.emsys.homepage.repository.querydsl.ArticleRepositoryCustom;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.StringExpression;
@@ -18,6 +19,7 @@ import static antlr.build.ANTLR.root;
 @RepositoryRestResource
 public interface ArticleRepository extends
         JpaRepository<Article, Long>,
+        ArticleRepositoryCustom,
         QuerydslPredicateExecutor<Article>, // 기본적으로 entity(Article) 안의 모든 기본 검색기능 추가
         QuerydslBinderCustomizer<QArticle> {
 
