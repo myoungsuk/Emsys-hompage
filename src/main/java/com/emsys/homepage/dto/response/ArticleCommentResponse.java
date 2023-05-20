@@ -12,7 +12,7 @@ public record ArticleCommentResponse(
         String email,
         String nickname,
         String userId
-) implements Serializable {
+) {
 
     public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email, String nickname, String userId) {
         return new ArticleCommentResponse(id, content, createdAt, email, nickname, userId);
