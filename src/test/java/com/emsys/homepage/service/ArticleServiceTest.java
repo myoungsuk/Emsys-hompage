@@ -2,7 +2,7 @@ package com.emsys.homepage.service;
 
 import com.emsys.homepage.domain.Article;
 import com.emsys.homepage.domain.UserAccount;
-import com.emsys.homepage.domain.type.SearchType;
+import com.emsys.homepage.domain.constant.SearchType;
 import com.emsys.homepage.dto.ArticleDto;
 import com.emsys.homepage.dto.ArticleWithCommentsDto;
 import com.emsys.homepage.dto.UserAccountDto;

@@ -1,4 +1,4 @@
-package com.emsys.homepage.domain.type;
+package com.emsys.homepage.domain.constant;
 
 import lombok.Getter;
 

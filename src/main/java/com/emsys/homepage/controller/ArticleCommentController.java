@@ -1,6 +1,7 @@
 package com.emsys.homepage.controller;
 
 import com.emsys.homepage.dto.UserAccountDto;
+import com.emsys.homepage.dto.request.ArticleCommentRequest;
 import com.emsys.homepage.service.ArticleCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,11 @@ public class ArticleCommentController {
 
     private final ArticleCommentService articleCommentService;
 
-    @PostMapping("/new")
+    @PostMapping ("/new")
     public String postNewArticleComment(ArticleCommentRequest articleCommentRequest) {
         // TODO: 인증 정보를 넣어줘야 한다.
         articleCommentService.saveArticleComment(articleCommentRequest.toDto(UserAccountDto.of(
-                "uno", "pw", "uno@mail.com", null, null
+                "nana", "pw", "nana@mail.com", null, null
         )));
 
 
