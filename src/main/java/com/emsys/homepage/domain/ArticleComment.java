@@ -15,21 +15,29 @@ import java.util.Objects;
 @Getter
 @ToString(callSuper = true)
 @Table(indexes = {
-        @Index(columnList = "content"),
-        @Index(columnList = "createdAt"),
-        @Index(columnList = "createdBy")
+        @Index(columnList = "content"), // "content" 필드에 대한 인덱스 설정
+        @Index(columnList = "createdAt"), // "createdAt" 필드에 대한 인덱스 설정
+        @Index(columnList = "createdBy") // "createdBy" 필드에 대한 인덱스 설정
 })
 @Entity
 public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 댓글 ID
 
-    @Setter @ManyToOne(optional = false) private Article article; // 게시글 (ID)
-    @Setter @ManyToOne(optional = false) @JoinColumn(name = "userId") private UserAccount userAccount; // 유저 정보 (ID)
+    @Setter
+    @ManyToOne(optional = false)
+    private Article article; // 댓글이 속한 게시글
 
-    @Setter @Column(nullable = false, length = 500) private String content; // 본문
+    @Setter
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userId")
+    private UserAccount userAccount; // 댓글 작성자
+
+    @Setter
+    @Column(nullable = false, length = 500)
+    private String content; // 댓글 내용
 
     protected ArticleComment() {
     }
@@ -40,6 +48,14 @@ public class ArticleComment extends AuditingFields {
         this.content = content;
     }
 
+    /**
+     * 댓글 객체 생성을 위한 factory method
+     *
+     * @param article     댓글이 속한 게시글
+     * @param userAccount 댓글 작성자
+     * @param content     댓글 내용
+     * @return 생성된 ArticleComment 객체
+     */
     public static ArticleComment of(Article article, UserAccount userAccount, String content) {
         return new ArticleComment(article, userAccount, content);
     }
@@ -56,4 +72,3 @@ public class ArticleComment extends AuditingFields {
         return Objects.hash(id);
     }
 }
-
