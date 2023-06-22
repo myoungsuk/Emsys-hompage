@@ -73,6 +73,10 @@ public record BoardPrincipal(
         return authorities;
     }
 
+
+
+
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
