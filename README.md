@@ -32,7 +32,10 @@ Spring Boot
 * Bootstrap 5.2.0-Beta1
 
 ##구조
-![use-case 다이어그램](https://github.com/myoungsuk/Emsys-hompage/assets/81986479/b83e8758-5a5c-4bc8-a162-bd794823abda)
+
+
+![use-case 다이어그램](<img width="252" alt="스크린샷 2023-06-24 오전 12 21 46" src="https://github.com/myoungsuk/Emsys-hompage/assets/81986479/3f376470-49f7-47db-8d7f-d7e2f8916e14">
+)
 ![er 다이어그램](https://github.com/myoungsuk/Emsys-hompage/assets/81986479/f5d8d388-3d23-4fa7-9b9d-242361964ae2)
 
 
