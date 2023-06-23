@@ -30,7 +30,10 @@ public class Article extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter @ManyToOne(optional = false)  @JoinColumn(name = "userId") private UserAccount userAccount;  // 유저 정보 (ID)
+    @Setter
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userId")
+    private UserAccount userAccount; // 유저 정보 (ID)
 
     @Setter @Column(nullable = false) private String title; // 제목
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문
@@ -67,11 +70,12 @@ public class Article extends AuditingFields {
         if (!(o instanceof Article that)) return false;
         // 새로 만든 entity 가 영속화 되지 않았다면 entity는 동등성 검사를 탈락한다.
         // id 가 부여(영속성 부여)되지 않았으면 동등하지 않다.
-        return id != null && id.equals(that.getId());    }
+        return this.getId() != null && this.getId().equals(that.getId());
+    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.getId());
     }
 
 }
