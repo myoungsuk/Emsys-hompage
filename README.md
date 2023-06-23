@@ -1,6 +1,7 @@
 # Emsys-hompage
 # 게시판 서비스 
 
+
 ## 개발 환경
 
 * Intellij IDEA Ultimate
@@ -30,13 +31,8 @@ Spring Boot
 * QueryDSL 5.0.0
 * Bootstrap 5.2.0-Beta1
 
-## 데모 페이지
+##구조
+![use-case 다이어그램](https://github.com/myoungsuk/Emsys-hompage/assets/81986479/b83e8758-5a5c-4bc8-a162-bd794823abda)
+![er 다이어그램](https://github.com/myoungsuk/Emsys-hompage/assets/81986479/f5d8d388-3d23-4fa7-9b9d-242361964ae2)
 
-(작성 중)
 
-## 질문, 건의
-
-프로젝트에 관해 궁금하신 점이나 건의 사항이 있으시다면 아래 항목을 이용해 주세요.
-
-* Issues: 버그 리포트, 제안 사항
-* Discussions: 프로젝트와 관련한 논의와 정보
