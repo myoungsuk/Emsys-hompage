@@ -1,6 +1,16 @@
 # Emsys-hompage
 # 게시판 서비스 
 
+## 구조
+
+* Use-case 다이어그램
+<img width="768" alt="스크린샷 2023-06-24 오전 12 40 32" src="https://github.com/myoungsuk/Emsys-hompage/assets/81986479/18f28c98-a8fa-4594-aa66-e65702db5e03">
+
+
+
+* ER 다이어그램
+<img width="959" alt="스크린샷 2023-06-24 오전 12 40 11" src="https://github.com/myoungsuk/Emsys-hompage/assets/81986479/400cb3fe-114d-46e8-b46e-3781809bca05">
+
 
 ## 개발 환경
 
@@ -31,11 +41,6 @@ Spring Boot
 * QueryDSL 5.0.0
 * Bootstrap 5.2.0-Beta1
 
-##구조
 
-
-![use-case 다이어그램](<img width="252" alt="스크린샷 2023-06-24 오전 12 21 46" src="https://github.com/myoungsuk/Emsys-hompage/assets/81986479/3f376470-49f7-47db-8d7f-d7e2f8916e14">
-)
-![er 다이어그램](https://github.com/myoungsuk/Emsys-hompage/assets/81986479/f5d8d388-3d23-4fa7-9b9d-242361964ae2)
 
 
