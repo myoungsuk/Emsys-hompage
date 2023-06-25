@@ -1,6 +1,17 @@
 # Emsys-hompage
 # 게시판 서비스 
 
+## 구조
+
+* Use-case 다이어그램
+<img width="768" alt="스크린샷 2023-06-24 오전 12 40 32" src="https://github.com/myoungsuk/Emsys-hompage/assets/81986479/18f28c98-a8fa-4594-aa66-e65702db5e03">
+
+
+
+* ER 다이어그램
+<img width="959" alt="스크린샷 2023-06-24 오전 12 40 11" src="https://github.com/myoungsuk/Emsys-hompage/assets/81986479/400cb3fe-114d-46e8-b46e-3781809bca05">
+
+
 ## 개발 환경
 
 * Intellij IDEA Ultimate
@@ -30,13 +41,6 @@ Spring Boot
 * QueryDSL 5.0.0
 * Bootstrap 5.2.0-Beta1
 
-## 데모 페이지
 
-(작성 중)
 
-## 질문, 건의
 
-프로젝트에 관해 궁금하신 점이나 건의 사항이 있으시다면 아래 항목을 이용해 주세요.
-
-* Issues: 버그 리포트, 제안 사항
-* Discussions: 프로젝트와 관련한 논의와 정보
