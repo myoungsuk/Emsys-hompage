@@ -9,55 +9,62 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
 @ToString(callSuper = true)
 @Table(indexes = {
-        @Index(columnList = "content"), // "content" 필드에 대한 인덱스 설정
-        @Index(columnList = "createdAt"), // "createdAt" 필드에 대한 인덱스 설정
-        @Index(columnList = "createdBy") // "createdBy" 필드에 대한 인덱스 설정
+        @Index(columnList = "content"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy")
 })
 @Entity
 public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 댓글 ID
+    private Long id;
 
     @Setter
     @ManyToOne(optional = false)
-    private Article article; // 댓글이 속한 게시글
+    private Article article; // 게시글 (ID)
 
     @Setter
-    @ManyToOne(optional = false)
     @JoinColumn(name = "userId")
-    private UserAccount userAccount; // 댓글 작성자
+    @ManyToOne(optional = false)
+    private UserAccount userAccount; // 유저 정보 (ID)
 
     @Setter
-    @Column(nullable = false, length = 500)
-    private String content; // 댓글 내용
+    @Column(updatable = false)
+    private Long parentCommentId; // 부모 댓글 ID
 
-    protected ArticleComment() {
-    }
+    @ToString.Exclude
+    @OrderBy("createdAt ASC")
+    @OneToMany(mappedBy = "parentCommentId", cascade = CascadeType.ALL)
+    private Set<ArticleComment> childComments = new LinkedHashSet<>();
 
-    private ArticleComment(Article article, UserAccount userAccount, String content) {
+    @Setter @Column(nullable = false, length = 500) private String content; // 본문
+
+
+    protected ArticleComment() {}
+
+    private ArticleComment(Article article, UserAccount userAccount, Long parentCommentId, String content) {
         this.article = article;
         this.userAccount = userAccount;
+        this.parentCommentId = parentCommentId;
         this.content = content;
     }
 
-    /**
-     * 댓글 객체 생성을 위한 factory method
-     *
-     * @param article     댓글이 속한 게시글
-     * @param userAccount 댓글 작성자
-     * @param content     댓글 내용
-     * @return 생성된 ArticleComment 객체
-     */
     public static ArticleComment of(Article article, UserAccount userAccount, String content) {
-        return new ArticleComment(article, userAccount, content);
+        return new ArticleComment(article, userAccount, null, content);
+    }
+
+    public void addChildComment(ArticleComment child) {
+        child.setParentCommentId(this.getId());
+        this.getChildComments().add(child);
     }
 
     @Override
@@ -71,4 +78,5 @@ public class ArticleComment extends AuditingFields {
     public int hashCode() {
         return Objects.hash(this.getId());
     }
+
 }

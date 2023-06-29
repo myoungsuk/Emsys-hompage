@@ -20,7 +20,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration // 현재 클래스를 스프링의 구성(Configuration) 클래스로 지정합니다.
-public class SecurityConfig{
+public class SecurityConfig {
 
     @Bean // SecurityFilterChain 빈을 생성하는 메서드입니다.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
