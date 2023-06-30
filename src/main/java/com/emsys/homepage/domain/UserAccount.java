@@ -45,7 +45,7 @@ public class UserAccount extends AuditingFields {  // AuditingFields를 상속�
 
 
     public static UserAccount of(String userId, String userPassword, String email, String nickname, String memo) {  // static factory method를 선언하여 UserAccount 객체를 생성합니다.
-        return new UserAccount(userId, userPassword, email, nickname, memo, null);
+        return UserAccount.of(userId, userPassword, email, nickname, memo, null);
     }
 
     public static UserAccount of(String userId, String userPassword, String email, String nickname, String memo, String createdBy) {
