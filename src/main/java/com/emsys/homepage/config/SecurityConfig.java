@@ -14,45 +14,87 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
-@Configuration // 현재 클래스를 스프링의 구성(Configuration) 클래스로 지정합니다.
+@Configuration
 public class SecurityConfig {
 
-    @Bean // SecurityFilterChain 빈을 생성하는 메서드입니다.
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService
+    ) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스에 대한 요청을 허용합니다.
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .mvcMatchers(
                                 HttpMethod.GET,
                                 "/",
                                 "/articles",
                                 "/articles/search-hashtag"
-                        ).permitAll() // 특정 URL에 대한 GET 요청을 허용합니다.
-                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증이 필요합니다.
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
-                .formLogin().and() // 폼 로그인 설정을 추가합니다.
-                .logout() // 로그아웃 설정을 추가합니다.
-                .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트할 URL을 설정합니다.
-                .and()
-                .build(); // HttpSecurity 설정을 빌드하여 SecurityFilterChain 객체를 반환합니다.
+                .formLogin(withDefaults())
+                .logout(logout -> logout.logoutSuccessUrl("/"))
+                .oauth2Login(oAuth -> oAuth
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService)
+                        )
+                )
+                .build();
     }
 
-    @Bean // UserDetailsService 빈을 생성하는 메서드입니다.
-    public UserDetailsService userDetailsService(UserAccountRepository userAccountRepository) {
-        return username -> userAccountRepository
-                .findById(username)
-                .map(UserAccountDto::from) // UserAccountDto로 변환합니다.
-                .map(BoardPrincipal::from) // BoardPrincipal로 변환합니다.
+    @Bean
+    public UserDetailsService userDetailsService(UserAccountService userAccountService) {
+        return username -> userAccountService
+                .searchUser(username)
+                .map(BoardPrincipal::from)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다 - username: " + username));
     }
 
-    @Bean // PasswordEncoder 빈을 생성하는 메서드입니다.
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // PasswordEncoder 인스턴스를 생성하여 반환합니다.
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService(
+            UserAccountService userAccountService,
+            PasswordEncoder passwordEncoder
+    ) {
+        final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+
+        return userRequest -> {
+            OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
+            KakaoOAuth2Response kakaoResponse = KakaoOAuth2Response.from(oAuth2User.getAttributes());
+            String registrationId = userRequest.getClientRegistration().getRegistrationId();
+            String providerId = String.valueOf(kakaoResponse.id());
+            String username = registrationId + "_" + providerId;
+            String dummyPassword = passwordEncoder.encode("{bcrypt}" + UUID.randomUUID());
+
+            return userAccountService.searchUser(username)
+                    .map(BoardPrincipal::from)
+                    .orElseGet(() ->
+                            BoardPrincipal.from(
+                                    userAccountService.saveUser(
+                                            username,
+                                            dummyPassword,
+                                            kakaoResponse.email(),
+                                            kakaoResponse.nickname(),
+                                            null
+                                    )
+                            )
+                    );
+        };
+
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
 }

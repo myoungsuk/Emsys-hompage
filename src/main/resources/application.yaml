@@ -63,24 +63,23 @@ spring:
   thymeleaf3:
     decoupled-logic: true
 
-#  # Spring Security OAuth2 클라이언트 설정입니다.
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          kakao:
-#            client-id: ${KAKAO_OAUTH_CLIENT_ID}
-#            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
-#            authorization-grant-type: authorization_code
-#            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
-#            client-authentication-method: POST
-#        provider:
-#          kakao:
-#            authorization-uri: https://kauth.kakao.com/oauth/authorize
-#            token-uri: https://kauth.kakao.com/oauth/token
-#            user-info-uri: https://kapi.kakao.com/v2/user/me
-#            user-name-attribute: id
-#
+  security:
+        oauth2:
+          client:
+            registration:
+              kakao:
+                client-id: ${KAKAO_OAUTH_CLIENT_ID}
+                client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
+                authorization-grant-type: authorization_code
+                redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+                client-authentication-method: POST
+            provider:
+              kakao:
+                authorization-uri: https://kauth.kakao.com/oauth/authorize
+                token-uri: https://kauth.kakao.com/oauth/token
+                user-info-uri: https://kapi.kakao.com/v2/user/me
+                user-name-attribute: id
+
 ## Heroku 프로파일 활성화 시 데이터베이스 연결 설정입니다.
 #---
 #spring:
